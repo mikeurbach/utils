@@ -1,1 +1,31 @@
-/home/mikeurbach/.bash_aliases
+alias l="ls -l"
+alias lf="ls -l | grep -v '^d'"
+alias ld="ls -l | grep '^d'"
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+alias mkdir='mkdir -p'
+alias mygcc='gcc -Wall -pedantic -std=c99 -ggdb'
+alias emacs='emacs -nw'
+alias kname='kill -9 `ps -u $UID | grep "$1" | awk 'NR==1' | cut -d " " -f1`'
+alias makenew='make clean; make debug'
+alias myvalgrind='valgrind --leak-check=yes --show-reachable=yes --log-file=valgrind.out'
+alias lf="ls -l | grep -v '^d'"
+alias ld="ls -l | grep '^d'"
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+alias mkdir='mkdir -p'
+alias mygcc='gcc -Wall -pedantic -std=c99 -ggdb'
+alias emacs='emacs -nw'
+alias kname='kill -9 `ps -u $UID | grep "$1" | awk 'NR==1' | cut -d " " -f1`'
+alias makenew='make clean; make debug'
+alias myvalgrind='valgrind --leak-check=yes --show-reachable=yes --log-file=valgrind.out'
+alias logisim='java -jar /home/mikeurbach/logisim/logisim-generic-2.7.1.jar'
+alias mysql='mysql --user=root --password=flynnlives'
+alias mylcc='lcc -Wf-g0 '
+alias stringf='cat ./* | grep'
+alias mongobg='mongod --fork --logpath /var/log/mongodb/mongodb.log --logappend'
+alias ti='~/Titanium_Studio/TitaniumStudio &'
+alias arc='mzscheme -f ~/arc3.1/as.scm'
+alias autotools='aclocal; autoconf; automake -a'
