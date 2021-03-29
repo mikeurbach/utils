@@ -1,0 +1,109 @@
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(custom-enabled-themes (quote (dracula)))
+ '(custom-safe-themes
+   (quote
+    ("81c3de64d684e23455236abde277cda4b66509ef2c28f66e059aa925b8b12534" default)))
+ '(package-archives
+   (quote
+    (("melpa" . "https://melpa.org/packages/")
+     ("gnu" . "https://elpa.gnu.org/packages/"))))
+ '(package-selected-packages
+   (quote
+    (yapfify counsel rg ivy-prescient swiper ivy modern-cpp-font-lock company lsp-ui lsp-mode use-package magit dracula-theme))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+(package-initialize)
+
+;; configure theme
+(use-package dracula-theme
+  :ensure t
+  :init
+  (load-theme 'dracula))
+
+(use-package modern-cpp-font-lock
+  :ensure t
+  :init
+  (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode))
+
+(load "~/alloy/external/llvm-project/mlir/utils/emacs/mlir-mode.el")
+
+(use-package yapfify
+  :ensure t)
+
+;; lsp-mode setup. requires clangd, pyls, and yapf executables.
+(use-package lsp-mode
+  :ensure t
+  :config
+  (use-package lsp-ui
+    :ensure t
+    :after lsp-mode
+    :hook (lsp-mode . lsp-ui-mode))
+
+  (setq lsp-pyls-plugins-pycodestyle-enabled nil)
+
+  (defun c-format-buffer-hook ()
+    (add-hook 'before-save-hook 'lsp-format-buffer))
+
+  (defun py-format-buffer-hook ()
+    (add-hook 'before-save-hook 'yapfify-buffer))
+
+  (add-hook 'c-mode-common-hook #'lsp)
+  (add-hook 'c-mode-common-hook 'c-format-buffer-hook)
+  (add-hook 'python-mode-hook #'lsp)
+  (add-hook 'python-mode-hook 'py-format-buffer-hook))
+
+;; company-mode setup
+(use-package company
+  :ensure t
+  :init
+  (setq company-idle-delay 0)
+  (add-hook 'lsp-mode-hook 'company-mode))
+
+;; ivy, counsel, swiper setup
+(use-package ivy
+  :ensure t
+  :diminish ivy-mode
+  :commands (ivy-mode)
+  :config
+  (require 'ivy)
+  (ivy-mode t)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+  (setq ivy-wrap t)
+  (setq ivy-count-format "%d/%d ")
+  )
+
+(use-package ivy-prescient
+  :ensure t
+  :after (ivy counsel)
+  :config
+  (ivy-prescient-mode t)
+  (prescient-persist-mode t))
+
+(use-package counsel
+  :ensure t
+  :bind (("C-c r" . counsel-rg))
+  :config
+  (setq counsel-rg-base-command
+	"rg -i -M 120 --no-heading --line-number --color never %s ."))
+
+(use-package swiper
+  :ensure t
+  :bind  (("C-s" . swiper)
+	  ("C-r" . swiper)))
+
+;; ripgrep setup. requires `rg' executable.
+(use-package rg
+  :ensure t
+  :config
+  (rg-enable-default-bindings))
